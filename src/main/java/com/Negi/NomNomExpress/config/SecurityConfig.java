@@ -38,6 +38,7 @@ public class SecurityConfig {
 			.antMatchers("/registerRestaurant").hasAnyRole("RESTAURANT")
 			.antMatchers("/addMenu").hasAnyRole("RESTAURANT")
 			.antMatchers("/updateMenuItem").hasAnyRole("RESTAURANT")
+			.antMatchers("/preparedFood").hasAnyRole("RESTAURANT")
 			.antMatchers(HttpMethod.POST, "/login").permitAll()
 			.antMatchers(HttpMethod.POST, "/register").permitAll()
 			.anyRequest().authenticated()

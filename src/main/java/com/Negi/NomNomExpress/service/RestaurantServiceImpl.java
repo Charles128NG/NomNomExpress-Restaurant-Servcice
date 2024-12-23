@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.Negi.NomNomExpress.DTO.AddMenuDTO;
 import com.Negi.NomNomExpress.DTO.MenuItemDTO;
+import com.Negi.NomNomExpress.DTO.OrderDTO;
 import com.Negi.NomNomExpress.DTO.RegisterRestaurantDTO;
 import com.Negi.NomNomExpress.DTO.RestaurantDTO;
 import com.Negi.NomNomExpress.DTO.RestaurantSearchDTO;
@@ -17,9 +18,12 @@ import com.Negi.NomNomExpress.Entity.Menu;
 import com.Negi.NomNomExpress.Entity.MenuItem;
 import com.Negi.NomNomExpress.Entity.Restaurant;
 import com.Negi.NomNomExpress.exception.RESTException;
+import com.Negi.NomNomExpress.kafka.KafkaProducerService;
 import com.Negi.NomNomExpress.repository.MenuItemRepository;
 import com.Negi.NomNomExpress.repository.MenuRepository;
 import com.Negi.NomNomExpress.repository.RestaurantRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService{
@@ -32,6 +36,11 @@ public class RestaurantServiceImpl implements RestaurantService{
 	
 	@Autowired
 	private MenuItemRepository menuItemRepo;
+	
+	@Autowired
+	private KafkaProducerService kafkaService;
+	
+	ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Override
 	public Restaurant registerRestaurant(RegisterRestaurantDTO registerRestaurantDTO) throws RESTException{
@@ -114,5 +123,18 @@ public class RestaurantServiceImpl implements RestaurantService{
 			throw new RESTException(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@Override
+	public OrderDTO prepareFood(OrderDTO orderDTO) throws RESTException {
+		try {
+			orderDTO.setOrderStatus("prepared");
+			kafkaService.sendMessage(objectMapper.writeValueAsString(orderDTO));
+			return orderDTO;
+		}catch(Exception e) {
+			throw new RESTException(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	
 
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Negi.NomNomExpress.DTO.AddMenuDTO;
 import com.Negi.NomNomExpress.DTO.AddMenuResponseDTO;
+import com.Negi.NomNomExpress.DTO.OrderDTO;
 import com.Negi.NomNomExpress.DTO.RegisterRestaurantDTO;
 import com.Negi.NomNomExpress.DTO.RestaurantSearchDTO;
 import com.Negi.NomNomExpress.DTO.SearchDishDTO;
@@ -102,6 +103,12 @@ public class RestaurantController {
 			throw new RESTException(e.getMessage(),e.getHttpStatus());
 		}
 	}
-	
-	
+	@PostMapping("/preparedFood")
+	public ResponseEntity<?> triggerFoodPrepared(@RequestBody OrderDTO orderDTO){
+		try {
+			return new ResponseEntity<>(service.prepareFood(orderDTO), HttpStatus.OK);
+		}catch(RESTException e) {
+			throw new RESTException(e.getMessage(),e.getHttpStatus());
+		}
+	}
 }

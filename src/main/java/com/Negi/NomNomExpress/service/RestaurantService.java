@@ -3,6 +3,7 @@ package com.Negi.NomNomExpress.service;
 import java.util.*;
 import com.Negi.NomNomExpress.DTO.AddMenuDTO;
 import com.Negi.NomNomExpress.DTO.MenuItemDTO;
+import com.Negi.NomNomExpress.DTO.OrderDTO;
 import com.Negi.NomNomExpress.DTO.RegisterRestaurantDTO;
 import com.Negi.NomNomExpress.DTO.RestaurantDTO;
 import com.Negi.NomNomExpress.DTO.RestaurantSearchDTO;
@@ -22,5 +23,7 @@ public interface RestaurantService {
 	public List<RestaurantDTO>searchByRestaurantName(RestaurantSearchDTO restaurantSearchDTO);
 	
 	public List<MenuItemDTO>searchByDishName(SearchDishDTO searchDishDTO);
+	
+	public OrderDTO prepareFood(OrderDTO orderDTO);
 	
 }
